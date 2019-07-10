@@ -12,108 +12,111 @@ Vagrant.configure("2") do |config|
   
     # Define node_name by appending the node id
     node_name = "cassandra" + "#{node_id}"
-	
-	# define settings for each node
-	config.vm.define node_name do |node|
+    
+    # define settings for each node
+    config.vm.define node_name do |node|
         
-	  # The most common configuration options are documented and commented below.
-	  # For a complete reference, please see the online documentation at
-	  # https://docs.vagrantup.com.
+      # The most common configuration options are documented and commented below.
+      # For a complete reference, please see the online documentation at
+      # https://docs.vagrantup.com.
 
       # Every Vagrant development environment requires a box. You can search for
       # boxes at https://vagrantcloud.com/search.
       config.vm.box = "ubuntu/trusty64"
 
-	  # Disable automatic box update checking. If you disable this, then
-	  # boxes will only be checked for updates when the user runs
-	  # `vagrant box outdated`. This is not recommended.
-	  # config.vm.box_check_update = false
+      # Disable automatic box update checking. If you disable this, then
+      # boxes will only be checked for updates when the user runs
+      # `vagrant box outdated`. This is not recommended.
+      # config.vm.box_check_update = false
 
-	  # Create a forwarded port mapping which allows access to a specific port
-	  # within the machine from a port on the host machine. In the example below,
-	  # accessing "localhost:8080" will access port 80 on the guest machine.
-	  # NOTE: This will enable public access to the opened port
-	  # config.vm.network "forwarded_port", guest: 80, host: 8080
+      # Create a forwarded port mapping which allows access to a specific port
+      # within the machine from a port on the host machine. In the example below,
+      # accessing "localhost:8080" will access port 80 on the guest machine.
+      # NOTE: This will enable public access to the opened port
+      # config.vm.network "forwarded_port", guest: 80, host: 8080
 
-	  # Create a forwarded port mapping which allows access to a specific port
-	  # within the machine from a port on the host machine and only allow access
-	  # via 127.0.0.1 to disable public access
-	  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-	  
-	  # Define nide ip by settings's node_ip_prefix
-	  node_ip = "192.168.3." + "#{node_id + 10}"
-	  
-	  # Create a private network, which allows host-only access to the machine
-	  # using a specific IP.
-	  # config.vm.network "private_network", ip: "192.168.33.10"
-	  config.vm.network "private_network", ip: node_ip
+      # Create a forwarded port mapping which allows access to a specific port
+      # within the machine from a port on the host machine and only allow access
+      # via 127.0.0.1 to disable public access
+      # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+      
+      # Define nide ip by settings's node_ip_prefix
+      node_ip = "192.168.9.#{node_id + 10}"
+      
+      # Create a private network, which allows host-only access to the machine
+      # using a specific IP.
+      # config.vm.network "private_network", ip: "192.168.33.10"
+      config.vm.network "private_network", ip: node_ip
 
-	  # Create a public network, which generally matched to bridged network.
-	  # Bridged networks make the machine appear as another physical device on
-	  # your network.
-	  # config.vm.network "public_network"
+      # Create a public network, which generally matched to bridged network.
+      # Bridged networks make the machine appear as another physical device on
+      # your network.
+      # config.vm.network "public_network"
 
-	  # Share an additional folder to the guest VM. The first argument is
-	  # the path on the host to the actual folder. The second argument is
-	  # the path on the guest to mount the folder. And the optional third
-	  # argument is a set of non-required options.
-	  # config.vm.synced_folder "../data", "/vagrant_data"
+      # Share an additional folder to the guest VM. The first argument is
+      # the path on the host to the actual folder. The second argument is
+      # the path on the guest to mount the folder. And the optional third
+      # argument is a set of non-required options.
+      # config.vm.synced_folder "../data", "/vagrant_data"
 
-	  # Provider-specific configuration so you can fine-tune various
-	  # backing providers for Vagrant. These expose provider-specific options.
-	  # Example for VirtualBox:
-	  #
-	  config.vm.provider "virtualbox" do |vb|
-		# Display the VirtualBox GUI when booting the machine
-		vb.gui = false
-	  
-		# Customize the amount of memory on the VM:
-		vb.memory = 2048
-		vb.name = node_name
-		vb.cpus = 1
-	  end
-	  
-	  # Disable the new default behavior introduced in Vagrant 1.7, to
+      # Provider-specific configuration so you can fine-tune various
+      # backing providers for Vagrant. These expose provider-specific options.
+      # Example for VirtualBox:
+      #
+      config.vm.provider "virtualbox" do |vb|
+        # Display the VirtualBox GUI when booting the machine
+        vb.gui = true
+      
+        # Customize the amount of memory on the VM:
+        vb.memory = 1024
+        #vb.name = node_name
+        vb.cpus = 1
+      end
+      
+      # Disable the new default behavior introduced in Vagrant 1.7, to
       # ensure that all Vagrant machines will use the same SSH key pair.
       # See https://github.com/mitchellh/vagrant/issues/5005
-	  node.ssh.insert_key = false
-	  
-	  #
-	  # View the documentation for the provider you are using for more
-	  # information on available options.
+      node.ssh.insert_key = false
+      config.vm.boot_timeout=3600
+      config.ssh.username = 'vagrant'
+      config.ssh.password = 'vagrant'
+      #
+      # View the documentation for the provider you are using for more
+      # information on available options.
 
-	  # Enable provisioning with a shell script. Additional provisioners such as
-	  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-	  # documentation for more information about their specific syntax and use.
-	  # config.vm.provision "shell", inline: <<-SHELL
-	  #   apt-get update
-	  #   apt-get install -y apache2
-	  # SHELL
-	  
-	  # Run Ansible from the Vagrant Host
-	  # Only execute once the Ansible provisioner,when all the machines are up and ready.
-	  if node_id == N
-	    config.vm.provision "ansible" do |ansible|
-	      ansible.playbook = "playbook.yml"
-		  ansible.limit = "all"
-		  ansible.verbose = "v"
-		  ansible.extra_vars = {
-		    node_ip_address: node_ip
-		  }
-	    end
-	  end
-	  
-	end
+      # Enable provisioning with a shell script. Additional provisioners such as
+      # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+      # documentation for more information about their specific syntax and use.
+      # config.vm.provision "shell", inline: <<-SHELL
+      #   apt-get update
+      #   apt-get install -y apache2
+      # SHELL
+      
+      # Run Ansible from the Vagrant Host
+      # Only execute once the Ansible provisioner,when all the machines are up and ready.
+      if node_id == N
+        config.vm.provision "ansible" do |ansible|
+          ansible.playbook = "playbook.yml"
+          ansible.limit = "all"
+          ansible.verbose = "v"
+          #ansible.extra_vars = {
+          #  node_ip_address: node_ip
+          #}
+        end
+      end
+      
+    end
   end
   config.vm.define "opscenter" do |opscenter|
-    ip_opscenter = "192.168.3.14"
+    ip_opscenter = "192.168.9.#{N+11}"
     opscenter.vm.box = "ubuntu/trusty64"
     opscenter.vm.network  "private_network", ip: ip_opscenter
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "tasks/opscenter.yml"
       config.vm.provider "virtualbox" do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "2048"]
+        vb.customize ["modifyvm", :id, "--memory", "1024"]
       end
     end
   end
 end
+
