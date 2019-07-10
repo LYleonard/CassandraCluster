@@ -77,9 +77,6 @@ Vagrant.configure("2") do |config|
       # ensure that all Vagrant machines will use the same SSH key pair.
       # See https://github.com/mitchellh/vagrant/issues/5005
       node.ssh.insert_key = false
-      config.vm.boot_timeout=3600
-      config.ssh.username = 'vagrant'
-      config.ssh.password = 'vagrant'
       #
       # View the documentation for the provider you are using for more
       # information on available options.
@@ -108,6 +105,7 @@ Vagrant.configure("2") do |config|
     end
   end
   config.vm.define "opscenter" do |opscenter|
+    opscenter.ssh.insert_key = false
     ip_opscenter = "192.168.9.#{N+11}"
     opscenter.vm.box = "ubuntu/trusty64"
     opscenter.vm.network  "private_network", ip: ip_opscenter

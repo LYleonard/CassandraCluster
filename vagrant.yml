@@ -1,9 +1,0 @@
---- 
-vm_box: ubuntu/machines
-vm_name: cassandra-node
-vm_memory: 2048
-vm_gui: false
-
----
-cluster_size: 3
-node_ip_prefix: 192.168.3.
