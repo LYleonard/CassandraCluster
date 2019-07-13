@@ -1,4 +1,4 @@
 [cassandras]
-cassandra1 ansible_ssh_host=127.0.0.1 ansible_port=2200
-cassandra2 ansible_ssh_host=127.0.0.1 ansible_port=2201
-cassandra3 ansible_ssh_host=127.0.0.1 ansible_port=2202
+cassandra1 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222
+cassandra2 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200
+cassandra3 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201

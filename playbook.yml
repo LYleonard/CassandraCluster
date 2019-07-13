@@ -2,26 +2,8 @@
 - hosts: all
   remote_user: vagrant
   become: yes
-  become_method: sudo 
+  become_user: root
   gather_facts: yes
 
-  tasks:
-  - debug: var=ansible_enp0s8.ipv4.address
-#  - name: install OpenJDK 8
-#    become: true
-#    apt:
-#      name:openjdk-8-jdk
-#      update_cache: yes
-#      cache_valid_time: 3600
-  - name: preparing for java installation
-    shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-
-  - name: installing oracle java
-    shell: DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-installer oracle-java8-set-default
-      
-  - include: tasks/install_cassandra.yml
-  
-  - name: copy cassandra.yaml with everything configured
-    template: src=templates/cassandra.yaml.j2 dest=/home/vagrant/apache-cassandra-3.11.4/conf/cassandra.yaml
-  - name: start cassandra
-    command: /home/vagrant/apache-cassandra-3.11.4/bin/cassandra -fR
+  roles:
+    - java

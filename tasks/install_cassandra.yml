@@ -1,4 +1,0 @@
-- name: extract Cassandra 3.11 into /home/cass
-  unarchive:
-    src: apache-cassandra-3.11.4-bin.tar.gz
-    dest: /home/cass
