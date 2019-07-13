@@ -91,30 +91,30 @@ Vagrant.configure("2") do |config|
       
       # Run Ansible from the Vagrant Host
       # Only execute once the Ansible provisioner,when all the machines are up and ready.
-      if node_id == N
-        config.vm.provision "ansible" do |ansible|
-          ansible.playbook = "playbook.yml"
-          ansible.limit = "all"
-          ansible.verbose = "v"
-          #ansible.extra_vars = {
-          #  node_ip_address: node_ip
-          #}
-        end
-      end
+#      if node_id == N
+#        config.vm.provision "ansible" do |ansible|
+#          ansible.playbook = "playbook.yml"
+#          ansible.limit = "all"
+#          ansible.verbose = "v"
+#          #ansible.extra_vars = {
+#          #  node_ip_address: node_ip
+#          #}
+#        end
+#      end
       
     end
   end
-  config.vm.define "opscenter" do |opscenter|
-    opscenter.ssh.insert_key = false
-    ip_opscenter = "192.168.9.#{N+11}"
-    opscenter.vm.box = "ubuntu/trusty64"
-    opscenter.vm.network  "private_network", ip: ip_opscenter
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "tasks/opscenter.yml"
-      config.vm.provider "virtualbox" do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "1024"]
-      end
-    end
-  end
+#  config.vm.define "opscenter" do |opscenter|
+#    opscenter.ssh.insert_key = false
+#    ip_opscenter = "192.168.9.#{N+11}"
+#    opscenter.vm.box = "ubuntu/trusty64"
+#    opscenter.vm.network  "private_network", ip: ip_opscenter
+#    config.vm.provision "ansible" do |ansible|
+#      ansible.playbook = "tasks/opscenter.yml"
+#      config.vm.provider "virtualbox" do |vb|
+#        vb.customize ["modifyvm", :id, "--memory", "1024"]
+#      end
+#    end
+#  end
 end
 
