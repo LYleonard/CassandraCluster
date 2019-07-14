@@ -1,0 +1,19 @@
+---
+- name: Update cache before install
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600 # 5 minutes
+  tags:
+    - install
+
+- name: Install Cassandra Server
+  apt: name=cassandra state=present update_cache=yes
+  tags:
+    - install
+
+- name: Enable cassandra server
+  service:
+          name: cassandra
+          enabled: yes
+  tags:
+    - install
